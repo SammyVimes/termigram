@@ -16,6 +16,9 @@ public class TerminalUtils {
 
     public static List<String> commandToText(final TerminalCommand terminalCommand) {
         String cmd = terminalCommand.getText();
+        if (cmd == null) {
+            return Collections.emptyList();
+        }
         if (!cmd.trim().isEmpty()) {
 
             final List<String> values = new ArrayList<>(10);
