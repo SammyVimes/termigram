@@ -4,6 +4,7 @@ import online.senya.termigram.terminal.TerminalCommand;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Semyon on 03.01.2017.
@@ -17,4 +18,6 @@ public interface ProcessHelper {
     String decode(final byte[] buffer, final int offset, final int length);
 
     List<String> commandToText(TerminalCommand terminalCommand);
+
+    Map<String, String> getEnvParams();
 }

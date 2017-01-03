@@ -38,6 +38,10 @@ public class ProcessRunner extends Thread {
         try {
             final ProcessBuilder pb = new ProcessBuilder(cmds);
             pb.redirectErrorStream(true);
+            pb.environment();
+            processHelper.getEnvParams().entrySet().forEach(stringStringEntry -> {
+                pb.environment().put(stringStringEntry.getKey(), stringStringEntry.getValue());
+            });
 
             final Process process = pb.start();
 
@@ -67,8 +71,9 @@ public class ProcessRunner extends Thread {
     }
 
     public void write(final String text) throws IOException {
+        String cmd = text + "\n";
         if (process != null && process.isAlive()) {
-            process.getOutputStream().write(text.getBytes());
+            process.getOutputStream().write(cmd.getBytes());
             process.getOutputStream().flush();
         }
     }

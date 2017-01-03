@@ -8,7 +8,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Semyon on 03.01.2017.
@@ -47,6 +49,11 @@ public class WindowsProcessHelper implements ProcessHelper {
         cmds.add(0, "/c");
         cmds.add(0, "cmd.exe");
         return cmds;
+    }
+
+    @Override
+    public Map<String, String> getEnvParams() {
+        return Collections.emptyMap();
     }
 
 }

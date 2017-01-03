@@ -70,3 +70,4 @@ buildNumber.properties
 
 .idea/
 logs/
+src/main/resources/secret.properties

@@ -7,10 +7,15 @@ import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.User;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Semyon on 03.01.2017.
@@ -52,6 +57,16 @@ public class TermigramBot extends TelegramLongPollingBot {
         }
 
         final String text = message.getText();
+
+        switch (text) {
+            case "Ctrl+C":
+                terminal.cancel();
+                return;
+            case "Ctrl+D":
+                terminal.send(new TerminalCommand("exit"));
+                return;
+        }
+
         terminal.send(new TerminalCommand(text), new CommandListener() {
             @Override
             public void commandOutput(String text) {
@@ -75,6 +90,7 @@ public class TermigramBot extends TelegramLongPollingBot {
 
             }
         });
+        sendMessageQuietly(createMessageWithKeyboard(chatId, getRunningProcessKeyboard()).setText("."));
     }
 
     @Override
@@ -85,6 +101,45 @@ public class TermigramBot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return token;
+    }
+
+    private ReplyKeyboardMarkup getRunningProcessKeyboard() {
+        final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboad(false);
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();
+        row.add(new KeyboardButton("Ctrl+C"));
+        row.add(new KeyboardButton("Ctrl+D"));
+        keyboard.add(row);
+        row = new KeyboardRow();
+        row.add(new KeyboardButton("Show passboard"));
+        keyboard.add(row);
+        replyKeyboardMarkup.setKeyboard(keyboard);
+        return replyKeyboardMarkup;
+    }
+
+    private SendMessage createMessageWithKeyboard(final Long chatId, final ReplyKeyboardMarkup replyKeyboardMarkup) {
+
+        final SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(chatId);
+
+        if (replyKeyboardMarkup != null) {
+            sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        }
+
+        return sendMessage;
+    }
+
+    private void sendMessageQuietly(final SendMessage msg) {
+        try {
+            sendMessage(msg);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
 }
