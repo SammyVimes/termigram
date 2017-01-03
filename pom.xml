@@ -67,7 +67,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>ru.gopstop.bot.GopStop</mainClass>
+                            <mainClass>online.senya.termigram.BotEntry</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
