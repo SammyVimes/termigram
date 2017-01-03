@@ -26,6 +26,7 @@ public class BotEntry {
 
         String token = properties.getProperty("token");
         String botName = properties.getProperty("bot_name");
+        String ownerId = properties.getProperty("owner_id");
 
         if (TextUtils.isEmpty(token)) {
             throw new RuntimeException("No telegram token found in resources/secret.properties");
@@ -37,7 +38,7 @@ public class BotEntry {
 
         final TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
-            telegramBotsApi.registerBot(new TermigramBot(new Terminal(), token, botName));
+            telegramBotsApi.registerBot(new TermigramBot(new Terminal(), token, botName, Integer.valueOf(ownerId)));
         } catch (final TelegramApiException e) {
         }
     }

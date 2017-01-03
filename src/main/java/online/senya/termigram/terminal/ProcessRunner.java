@@ -37,7 +37,7 @@ public class ProcessRunner extends Thread {
         }
         try {
             final ProcessBuilder pb = new ProcessBuilder(cmds);
-            pb.redirectErrorStream();
+            pb.redirectErrorStream(true);
 
             final Process process = pb.start();
 

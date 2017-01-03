@@ -46,9 +46,37 @@ public class Terminal implements CommandListener {
     }
 
     public void send(final TerminalCommand command) {
+        send(command, null);
+    }
+
+    public void send(final TerminalCommand command, final CommandListener commandListener) {
         handler.post(() -> {
             if (currentProcessRunner == null) {
-                currentProcessRunner = new ProcessRunner(this, command, processHelper, handler);
+                currentProcessRunner = new ProcessRunner(new CommandListener() {
+                    @Override
+                    public void commandOutput(String text) {
+                        Terminal.this.commandOutput(text);
+                        if (commandListener != null) {
+                            commandListener.commandOutput(text);
+                        }
+                    }
+
+                    @Override
+                    public void commandCompleted(String cmd, int result) {
+                        Terminal.this.commandCompleted(cmd, result);
+                        if (commandListener != null) {
+                            commandListener.commandCompleted(cmd, result);
+                        }
+                    }
+
+                    @Override
+                    public void commandFailed(Exception exp) {
+                        Terminal.this.commandFailed(exp);
+                        if (commandListener != null) {
+                            commandListener.commandFailed(exp);
+                        }
+                    }
+                }, command, processHelper, handler);
                 currentProcessRunner.start();
             } else {
                 try {
