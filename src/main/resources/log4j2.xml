@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>%d{ISO8601} [%t] %p %c{3} - %m%n</pattern>
+            </PatternLayout>
+            <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
+        </Console>
+        <RollingFile name="SimpleRollingFile"
+                     fileName="logs/all_logs.log"
+                     immediateFlush="true"
+                     filePattern="logs/all_logs.%d{yyyy-MM-dd.HH}.%i.log">
+            <PatternLayout>
+                <pattern>%d{ISO8601} [%t] %p %c{3} - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+            <!--<AppenderRef ref="SimpleRollingFile"/>-->
+        </Root>
+    </Loggers>
+</Configuration>
