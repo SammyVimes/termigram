@@ -2,6 +2,7 @@ package online.senya.termigram;
 
 import online.senya.termigram.terminal.Terminal;
 import org.apache.http.util.TextUtils;
+import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
@@ -14,6 +15,7 @@ import java.util.Properties;
 public class BotEntry {
 
     public static void main(final String[] args) {
+        ApiContextInitializer.init();
         final Properties properties = new Properties();
 
         try {
